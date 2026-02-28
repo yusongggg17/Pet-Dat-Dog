@@ -289,6 +289,14 @@ public class Grid : MonoBehaviour
             yield return null;
         }
         transform.position = p;
+        foreach (GameObject dog in dogs)
+        {
+            if (dog == null) continue;
+            if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0.5f, playerY * tileSize + originY)) < 0.1f)
+            {
+                ExplodeDog(dog);
+            }
+        }
         isMoving = false;
         StopCoroutine(Animate(newX, newY, duration));
     }
