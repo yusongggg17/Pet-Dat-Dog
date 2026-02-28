@@ -1,0 +1,96 @@
+LEVEL DESIGN CONCEPTS
+
+How fast/often does the player move in relation to the dogs? 
+
+- Player moves arbitrarily, like Crossy road/flappy bird with current delay depending on animation (can change amount of delay)
+- Dogs move at a speed around 1.5 seconds (can be changed)
+
+ 
+
+What kind of obstacles can be added to make the game more difficult? 
+
+- varying types of one block and or more block uncrossable paths that get in the way (not defined yet) 
+
+- Obstacles that humans can get over but dogs cannot 
+
+- Tiles that can slow you down (Time you out for a small moment) 
+
+- Potential small variation that slows you down even more 
+
+- Object that requires you to spend X seconds to move through (Bush) 
+
+- Objects that blinds you temporarily (like blooper from Mario kart) 
+
+-  
+
+ 
+
+How might it be better to grow and shrink playing field of level? 
+
+- Will happen later 
+
+ 
+
+How does the player start? How far away is the dog start from the player? 
+
+- Be in a visible range at the start of the level 
+
+ 
+
+What is the range of dogs until they start to follow you?  
+
+- 5 X 5 radius around the dogs 
+
+ 
+
+Different type of enemy dog that stands on two legs 
+
+-Faster 
+
+How fast/often does the player move in relation to the dogs? 
+
+- Moves arbitrarily, like Crossy road/flappy bird 
+
+ 
+
+What kind of obstacles can be added to make the game more difficult? 
+
+- varying types of one block and or more block uncrossable paths that get in the way (not defined yet) 
+
+- Obstacles that humans can get over but dogs cannot 
+
+- Tiles that can slow you down (Time you out for a small moment) 
+
+- Potential small variation that slows you down even more 
+
+- Object that requires you to spend X seconds to move through (Bush) 
+
+- Objects that blinds you temporarily (like blooper from Mario kart) 
+
+-  
+
+ 
+
+How might it be better to grow and shrink playing field of level? 
+
+- Will happen later 
+
+ 
+
+How does the player start? How far away is the dog start from the player? 
+
+- Be in a visible range at the start of the level 
+
+ 
+
+What is the range of dogs until they start to follow you?  
+
+- 5 X 5 radius around the dogs 
+
+ 
+
+Different type of enemy dog that stands on two legs 
+
+- Faster 
+
+- Can follow person through obstacles that regular dogs cannot cross
