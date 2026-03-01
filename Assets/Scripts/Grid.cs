@@ -219,6 +219,8 @@ public class Grid : MonoBehaviour
                     dog.transform.rotation = Quaternion.LookRotation(dir);
                     int targetX=(int)((dog.transform.position.x+ dir.x * tileSize - originX) / tileSize);
                     int targetY=(int)((dog.transform.position.z+ dir.z * tileSize - originY) / tileSize);
+                    Vector3 target=dog.transform.position + dir * tileSize;
+                    Vector3 starting=dog.transform.position;
                     if(canGoto(targetX, targetY) && (level[targetX, targetY] == (int)tiles.road||level[targetX, targetY] == (int)tiles.final||level[targetX, targetY] == (int)tiles.spawn||level[targetX, targetY] ==(int)tiles.blind))
                     {
                         bool closeDog=false;
@@ -232,7 +234,7 @@ public class Grid : MonoBehaviour
                                 break;
                             }
                         }
-                        if(!closeDog) dog.transform.position += dir * tileSize;
+                        if(!closeDog) StartCoroutine(AnimateDog(starting, target, dog));
                     }
                 }
                 if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY)) < 0.1f)
@@ -405,5 +407,16 @@ public class Grid : MonoBehaviour
             yield return null;
         }
         levelObjs[newX, newY].transform.GetChild(1).gameObject.SetActive(false);
+    }
+    public IEnumerator AnimateDog(Vector3 oldPos, Vector3 newPos, GameObject dog, float duration = 0.25f)
+    {   
+        float elapsed = 0;
+        while(elapsed < duration)
+        {
+            elapsed+=Time.deltaTime;
+            dog.transform.position = Vector3.Lerp(oldPos, newPos, (float)elapsed / duration);
+            yield return null;
+        }
+        dog.transform.position = newPos;
     }
 }
