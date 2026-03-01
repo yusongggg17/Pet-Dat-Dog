@@ -26,7 +26,6 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject build22Tile;
     [SerializeField] public GameObject build23Tile;
     [SerializeField] public GameObject buildCornerTile;
-    [SerializeField] public GameObject finalTile;
     [SerializeField] public GameObject dogObject;
     [SerializeField] public GameObject gifModel;
     [SerializeField] public GameObject light;
@@ -151,7 +150,7 @@ public class Grid : MonoBehaviour
                         tile = Instantiate(sidewalkTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
                         break;
                     case (int)tiles.final:
-                        tile = Instantiate(finalTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
+                        tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
                         break;
                     case (int)tiles.spawn:
                         tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
@@ -201,8 +200,8 @@ public class Grid : MonoBehaviour
     }
     void Update()
     {
-        dogLoop+=Time.deltaTime;
-        if(dogLoop > 1.5f)
+        dogLoop += Time.deltaTime;
+        if (dogLoop > 2.0f)
         {
             dogLoop = 0;
             foreach (GameObject dog in dogs)
@@ -432,21 +431,7 @@ public class Grid : MonoBehaviour
     public IEnumerator AnimateDog(Vector3 oldPos, Vector3 newPos, GameObject dog, float duration = 0.25f)
     {
         float elapsed = 0;
-<<<<<<< HEAD
         while (elapsed < duration)
-=======
-        if (dog.GetComponentInChildren<dogJump>() != null)
-        {
-            dog.GetComponentInChildren<dogJump>().playJumpAnim();
-            
-        }
-        else
-        {
-            print("no dog");
-        }
-
-        while(elapsed < duration)
->>>>>>> 3e5b4b2a4ba04b53f2e75195f11befb296ff554c
         {
             elapsed += Time.deltaTime;
             dog.transform.position = Vector3.Lerp(oldPos, newPos, (float)elapsed / duration);
