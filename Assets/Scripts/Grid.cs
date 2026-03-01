@@ -26,6 +26,7 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject build22Tile;
     [SerializeField] public GameObject build23Tile;
     [SerializeField] public GameObject buildCornerTile;
+    [SerializeField] public GameObject finalTile;
     [SerializeField] public GameObject dogObject;
     [SerializeField] public GameObject gifModel;
     [SerializeField] public GameObject light;
@@ -146,7 +147,7 @@ public class Grid : MonoBehaviour
                         tile = Instantiate(sidewalkTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
                         break;
                     case (int)tiles.final:
-                        tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
+                        tile = Instantiate(finalTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
                         break;
                     case (int)tiles.spawn:
                         tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
