@@ -947,7 +947,7 @@ MonoBehaviour:
   m_text: 'Score: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2c6dccfcc7c3ed14aa70d61ef2c3e1a4, type: 2}
-  m_sharedMaterial: {fileID: 5350558026846690376, guid: 2c6dccfcc7c3ed14aa70d61ef2c3e1a4, type: 2}
+  m_sharedMaterial: {fileID: 208245305824959394, guid: 2c6dccfcc7c3ed14aa70d61ef2c3e1a4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3327,6 +3327,7 @@ MonoBehaviour:
   originX: 0
   originY: 0
   tileSize: 4
+  currentScore: 0
   score: 0
   dogLoop: 0
   isMoving: 0
