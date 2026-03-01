@@ -415,6 +415,11 @@ public class Grid : MonoBehaviour
         {
             elapsed+=Time.deltaTime;
             dog.transform.position = Vector3.Lerp(oldPos, newPos, (float)elapsed / duration);
+            if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY)) < 0.1f)
+            {
+                ExplodeDog(dog);
+                break;
+            }
             yield return null;
         }
         dog.transform.position = newPos;
