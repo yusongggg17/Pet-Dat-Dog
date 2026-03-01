@@ -388,7 +388,8 @@ public class Grid : MonoBehaviour
         light.GetComponent<Light>().intensity=1;
     }
     public IEnumerator ChildAnimate(int newX, int newY)
-    {
+    {   
+        soundManager.playKick();
         level[newX, newY] = (int)tiles.road;
         float elapsed = 0;
         while(elapsed < 0.5f)

@@ -9,6 +9,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip explosion;
     public AudioClip explosionAlt;
     public AudioClip pipe;
+    public AudioClip kick;
     public double soundDelay;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -36,7 +37,10 @@ public class SoundManager : MonoBehaviour
     {
         audioSource.PlayOneShot(pipe, 1f);
     }
-
+    public void playKick()
+    {
+        audioSource.PlayOneShot(kick, 1f);
+    }
     IEnumerator PlayDelayed(AudioClip clip, float delay)
     {
         yield return new WaitForSeconds(delay);
