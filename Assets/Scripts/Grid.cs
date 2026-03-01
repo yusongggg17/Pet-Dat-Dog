@@ -197,7 +197,7 @@ public class Grid : MonoBehaviour
     void Update()
     {
         dogLoop+=Time.deltaTime;
-        if(dogLoop > 2.0f)
+        if(dogLoop > 1.5f)
         {
             dogLoop=0;
             foreach(GameObject dog in dogs)
