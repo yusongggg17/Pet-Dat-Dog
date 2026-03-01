@@ -27,6 +27,7 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject build23Tile;
     [SerializeField] public GameObject buildCornerTile;
     [SerializeField] public GameObject dogObject;
+    [SerializeField] public GameObject light;
     public SoundManager soundManager;
     public int dogcounter;
     public int playerX;
@@ -125,6 +126,7 @@ public class Grid : MonoBehaviour
                         break;
                     case (int)tiles.child:
                         tile = Instantiate(childTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
+                        levelObjs[i, j] = tile;
                         break;
                     case (int)tiles.car1:
                         tile = Instantiate(car1Tile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
@@ -302,6 +304,7 @@ public class Grid : MonoBehaviour
                 else if(level[newX, newY] == (int)tiles.child)
                 {
                     print("You stepped on a child tile!");
+                    StartCoroutine(ChildAnimate(newX, newY));
                     StartCoroutine(Animate(newX, newY, 0.5f));
                 }
                 else StartCoroutine(Animate(newX, newY));
@@ -361,6 +364,40 @@ public class Grid : MonoBehaviour
         {
             elapsed+=Time.deltaTime;
             levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position = Vector3.Lerp(p0, p, (float)elapsed / 0.5f);
+            yield return null;
+        }
+        levelObjs[newX, newY].transform.GetChild(1).gameObject.SetActive(false);
+        while(elapsed < 1f)
+        {
+            light.GetComponent<Light>().intensity=1+(((elapsed-0.5f)/0.5f)*99);
+            yield return null;
+            elapsed+=Time.deltaTime;
+        }
+        while(elapsed < 3f)
+        {
+            light.GetComponent<Light>().intensity=100-(((elapsed-1f)/2f)*99);
+            yield return null;
+            elapsed+=Time.deltaTime;
+        }
+        light.GetComponent<Light>().intensity=1;
+    }
+    public IEnumerator ChildAnimate(int newX, int newY)
+    {
+        level[newX, newY] = (int)tiles.road;
+        float elapsed = 0;
+        while(elapsed < 0.5f)
+        {
+            elapsed+=Time.deltaTime;
+            yield return null;
+        }
+        Vector3 p0=levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position; 
+        elapsed = 0;
+        Vector3 p = p0;
+        p.y += 15f;
+        while(elapsed < 0.25f)
+        {
+            elapsed+=Time.deltaTime;
+            levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position = Vector3.Lerp(p0, p, (float)elapsed / 0.25f);
             yield return null;
         }
         levelObjs[newX, newY].transform.GetChild(1).gameObject.SetActive(false);
