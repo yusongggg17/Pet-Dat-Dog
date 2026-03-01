@@ -348,10 +348,10 @@ public class Grid : MonoBehaviour
         float elapsed = 0;
         Vector3 p = p0;
         p.y -= 5f;
-        while(elapsed < 0.25f)
+        while(elapsed < 0.5f)
         {
             elapsed+=Time.deltaTime;
-            levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position = Vector3.Lerp(p0, p, (float)elapsed / 0.25f);
+            levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position = Vector3.Lerp(p0, p, (float)elapsed / 0.5f);
             yield return null;
         }
         levelObjs[newX, newY].transform.GetChild(1).gameObject.SetActive(false);
