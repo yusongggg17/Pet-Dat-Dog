@@ -135,7 +135,7 @@ public class Grid : MonoBehaviour
                         break;
                     case (int)tiles.spawn:
                         tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
-                        GameObject dog=Instantiate(dogObject, new Vector3(originX + i * tileSize, 0.5f, originY + j * tileSize), Quaternion.identity);
+                        GameObject dog=Instantiate(dogObject, new Vector3(originX + i * tileSize, 0f, originY + j * tileSize), Quaternion.identity);
                         dog.SetActive(true);
                         dogs.Add(dog);
                         break;
@@ -186,8 +186,8 @@ public class Grid : MonoBehaviour
             foreach(GameObject dog in dogs)
             {
                 if (dog == null) continue;
-                float dirMag = (new Vector3(playerX * tileSize + originX, 0.5f, playerY * tileSize + originY) - dog.transform.position).magnitude;
-                Vector3 dir = (new Vector3(playerX * tileSize + originX, 0.5f, playerY * tileSize + originY) - dog.transform.position).normalized;
+                float dirMag = (new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY) - dog.transform.position).magnitude;
+                Vector3 dir = (new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY) - dog.transform.position).normalized;
                 if (Mathf.Abs(dir.x) > Mathf.Abs(dir.z))
                 {
                     dir.z = 0;
@@ -210,7 +210,7 @@ public class Grid : MonoBehaviour
                         {
                             if (d == null) continue;
                             if (d == dog) continue;
-                            if (Vector3.Distance(d.transform.position, new Vector3(targetX * tileSize + originX, 0.5f, targetY * tileSize + originY)) < 0.1f)
+                            if (Vector3.Distance(d.transform.position, new Vector3(targetX * tileSize + originX, 0f, targetY * tileSize + originY)) < 0.1f)
                             {
                                 closeDog=true;
                                 break;
@@ -219,7 +219,7 @@ public class Grid : MonoBehaviour
                         if(!closeDog) dog.transform.position += dir * tileSize;
                     }
                 }
-                if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0.5f, playerY * tileSize + originY)) < 0.1f)
+                if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY)) < 0.1f)
                 {
                     ExplodeDog(dog);
                 }
@@ -310,7 +310,7 @@ public class Grid : MonoBehaviour
         foreach (GameObject dog in dogs)
         {
             if (dog == null) continue;
-            if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0.5f, playerY * tileSize + originY)) < 0.1f)
+            if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY)) < 0.1f)
             {
                 ExplodeDog(dog);
             }
