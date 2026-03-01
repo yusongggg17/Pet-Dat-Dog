@@ -5,6 +5,8 @@ using System;
 using System.Net;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 public class Grid : MonoBehaviour
 {
     public enum tiles { sidewalk, spawn, final, buildR1, buildR2, buildCorner, jump, blind, slow, child, car1, car2, cone, road, empty };
@@ -82,6 +84,7 @@ public class Grid : MonoBehaviour
         {(int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.buildR2},
         {(int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.road,       (int)tiles.buildR2}
     };
+    public GameObject[,] levelObjs;
     void Start()
     {
         dogs = new List<GameObject>();
@@ -97,6 +100,7 @@ public class Grid : MonoBehaviour
         p.z = originY + playerY * tileSize;
         transform.position = p;
         isMoving = false;
+        levelObjs = new GameObject[level.GetLength(0), level.GetLength(1)];
         for (int i = 0; i < level.GetLength(0); i++)
         {
             for (int j = 0; j < level.GetLength(1); j++)
@@ -111,6 +115,7 @@ public class Grid : MonoBehaviour
                         break;
                     case (int)tiles.blind:
                         tile = Instantiate(blindTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
+                        levelObjs[i, j] = tile;
                         break;
                     case (int)tiles.slow:
                         tile = Instantiate(slowTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
@@ -277,6 +282,7 @@ public class Grid : MonoBehaviour
                 if(level[newX, newY] == (int)tiles.blind)
                 {
                     print("You stepped on a blind tile!");
+                    StartCoroutine(AnvilAnimate(newX, newY));
                     StartCoroutine(Animate(newX, newY));
                 }
                 else if(level[newX, newY] == (int)tiles.slow)
@@ -301,11 +307,11 @@ public class Grid : MonoBehaviour
     public IEnumerator Animate(int newX, int newY, float duration = 0.25f)
     {   
         isMoving = true;
-        float elapsed = 0;
         Vector3 p=transform.position;
         Vector3 p0=p;
         p.x = originX + newX * tileSize;
         p.z = originY + newY * tileSize;
+        float elapsed = 0;
         while(elapsed < duration)
         {
             elapsed+=Time.deltaTime;
@@ -334,5 +340,21 @@ public class Grid : MonoBehaviour
     {
         score--;
         Destroy(dog);
+    }
+    public IEnumerator AnvilAnimate(int newX, int newY)
+    {
+        level[newX, newY] = (int)tiles.road;
+        Vector3 p0=levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position; 
+        float elapsed = 0;
+        Vector3 p = p0;
+        p.y -= 5f;
+        while(elapsed < 0.25f)
+        {
+            print(levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position);
+            elapsed+=Time.deltaTime;
+            transform.position = Vector3.Lerp(p0, p, (float)elapsed / 0.25f);
+            yield return null;
+        }
+        levelObjs[newX, newY].transform.GetChild(1).gameObject.SetActive(false);
     }
 }
