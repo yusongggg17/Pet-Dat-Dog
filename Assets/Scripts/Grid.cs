@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using UnityEngine.UI;
 public class Grid : MonoBehaviour
 {
     public enum tiles { sidewalk, spawn, final, buildR1, buildR2, buildCorner, jump, blind, slow, child, car1, car2, cone, road, empty };
@@ -30,7 +31,7 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject finalTile;
     [SerializeField] public GameObject dogObject;
     [SerializeField] public GameObject gifModel;
-    [SerializeField] public GameObject light;
+    [SerializeField] public GameObject canvas;
     [SerializeField] public GameObject scoreUI;
     public SoundManager soundManager;
     public int dogcounter;
@@ -390,17 +391,17 @@ public class Grid : MonoBehaviour
         levelObjs[newX, newY].transform.GetChild(1).gameObject.SetActive(false);
         while(elapsed < 1f)
         {
-            light.GetComponent<Light>().intensity=1+(((elapsed-0.5f)/0.5f)*99);
+            canvas.GetComponent<CanvasGroup>().alpha = (((elapsed-0.5f)/0.5f));
             yield return null;
             elapsed+=Time.deltaTime;
         }
         while(elapsed < 3f)
         {
-            light.GetComponent<Light>().intensity=100-(((elapsed-1f)/2f)*99);
+            canvas.GetComponent<CanvasGroup>().alpha=1-(((elapsed-1f)/2f));
             yield return null;
             elapsed+=Time.deltaTime;
         }
-        light.GetComponent<Light>().intensity=1;
+        canvas.GetComponent<CanvasGroup>().alpha = 0;
     }
     public IEnumerator ChildAnimate(int newX, int newY)
     {   
