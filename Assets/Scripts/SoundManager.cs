@@ -26,7 +26,7 @@ public class SoundManager : MonoBehaviour
     public void playName(int index)
     {
         if(index==50)audioSource.PlayOneShot(explosionAlt, 1f);
-        else    audioSource.PlayOneShot(explosion, 0.5f);
+        else    audioSource.PlayOneShot(explosion, 0.4f);
         Debug.Log("Playing name clip at index: " + index);  
         if (index >= 0&& index<nameClips.Length && nameClips[index] != null) {
             StartCoroutine(PlayDelayed(nameClips[index], (float)soundDelay));
