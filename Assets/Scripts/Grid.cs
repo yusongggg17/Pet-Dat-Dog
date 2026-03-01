@@ -327,6 +327,7 @@ public class Grid : MonoBehaviour
         Vector3 p0=p;
         p.x = originX + newX * tileSize;
         p.z = originY + newY * tileSize;
+        transform.GetChild(1).rotation = Quaternion.LookRotation((p-p0).normalized)*Quaternion.Euler(Vector3.up * -90);;
         float elapsed = 0;
         while(elapsed < duration)
         {
