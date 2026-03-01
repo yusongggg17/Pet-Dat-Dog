@@ -39,6 +39,7 @@ public class Grid : MonoBehaviour
     public int originX;
     public int originY;
     public int tileSize;
+    public int currentScore;
     public int score;
     public float dogLoop;
     public bool isMoving;
@@ -102,6 +103,7 @@ public class Grid : MonoBehaviour
         originY=0;
         tileSize=4;
         score=0;
+        currentScore = PlayerPrefs.GetInt("PlayerScore", 0);
         dogLoop=0;
         Vector3 p=transform.position;
         p.x = originX + playerX * tileSize;
@@ -358,6 +360,7 @@ public class Grid : MonoBehaviour
     {
         score--;
         scoreUI. GetComponent<TMPro.TextMeshProUGUI>().text=("Score: "+score);
+        PlayerPrefs.SetInt("PlayerScore", score);
         GameObject gif=Instantiate(gifModel, new Vector3(dog.transform.position.x, dog.transform.position.y+1, dog.transform.position.z), Quaternion.identity);
         gif.SetActive(true);
         Destroy(dog);
