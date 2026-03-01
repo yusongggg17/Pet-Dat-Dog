@@ -27,6 +27,7 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject build23Tile;
     [SerializeField] public GameObject buildCornerTile;
     [SerializeField] public GameObject dogObject;
+    [SerializeField] public GameObject gifModel;
     [SerializeField] public GameObject light;
     [SerializeField] public GameObject scoreUI;
     public SoundManager soundManager;
@@ -239,7 +240,7 @@ public class Grid : MonoBehaviour
                 }
                 if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY)) < 0.1f)
                 {
-                    ExplodeDog(dog);
+                    StartCoroutine(ExplodeDog(dog));
                 }
             }
         }
@@ -336,7 +337,7 @@ public class Grid : MonoBehaviour
             if (dog == null) continue;
             if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY)) < 0.1f)
             {
-                ExplodeDog(dog);
+                StartCoroutine(ExplodeDog(dog));
             }
         }
         isMoving = false;
@@ -349,14 +350,22 @@ public class Grid : MonoBehaviour
         return true;
     }
     
-    public void ExplodeDog(GameObject dog)
+    public IEnumerator ExplodeDog(GameObject dog)
     {
         score--;
         scoreUI. GetComponent<TMPro.TextMeshProUGUI>().text=("Score: "+score);
+        GameObject gif=Instantiate(gifModel, new Vector3(dog.transform.position.x, dog.transform.position.y+1, dog.transform.position.z), Quaternion.identity);
+        gif.SetActive(true);
         Destroy(dog);
-        //calls a function in sound file to play the correct indexed sound
         int index=int.Parse(dog.name);
         soundManager.playName(index);
+        float elapsed=0;
+        while(elapsed < 1.0f)
+        {
+            yield return null;
+            elapsed+=Time.deltaTime;
+        }
+        Destroy(gif);
     }
     public IEnumerator AnvilAnimate(int newX, int newY)
     {
@@ -418,7 +427,7 @@ public class Grid : MonoBehaviour
             dog.transform.position = Vector3.Lerp(oldPos, newPos, (float)elapsed / duration);
             if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY)) < 0.1f)
             {
-                ExplodeDog(dog);
+                StartCoroutine(ExplodeDog(dog));
                 break;
             }
             yield return null;
