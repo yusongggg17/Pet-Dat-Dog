@@ -89,7 +89,6 @@ public class Grid : MonoBehaviour
     public GameObject[,] levelObjs;
     void Start()
     {
-        soundManager= new SoundManager();
         dogs = new List<GameObject>();
         dogcounter=0;
         playerX = 3;
