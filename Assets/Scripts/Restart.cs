@@ -1,15 +1,12 @@
 using UnityEngine;
-using TMPro;
+using UnityEngine.SceneManagement;
 
-public class DisplayScore : MonoBehaviour
+public class Restart : MonoBehaviour
 {
-    public TextMeshProUGUI scoreText;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        int savedScore = PlayerPrefs.GetInt("PlayerScore", 0);
-        scoreText.text = "Dogs Exploded: " + Mathf.Abs(savedScore);
+        SceneManager.LoadScene("Dog");
     }
 
     // Update is called once per frame

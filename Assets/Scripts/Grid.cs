@@ -39,7 +39,6 @@ public class Grid : MonoBehaviour
     public int originX;
     public int originY;
     public int tileSize;
-    public int currentScore;
     public int score;
     public float dogLoop;
     public bool isMoving;
@@ -103,7 +102,7 @@ public class Grid : MonoBehaviour
         originY=0;
         tileSize=4;
         score=0;
-        currentScore = PlayerPrefs.GetInt("PlayerScore", 0);
+        PlayerPrefs.DeleteKey("PlayerScore");
         dogLoop=0;
         Vector3 p=transform.position;
         p.x = originX + playerX * tileSize;
