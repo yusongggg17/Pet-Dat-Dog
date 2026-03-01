@@ -421,6 +421,16 @@ public class Grid : MonoBehaviour
     public IEnumerator AnimateDog(Vector3 oldPos, Vector3 newPos, GameObject dog, float duration = 0.25f)
     {   
         float elapsed = 0;
+        if (dog.GetComponentInChildren<dogJump>() != null)
+        {
+            dog.GetComponentInChildren<dogJump>().playJumpAnim();
+            
+        }
+        else
+        {
+            print("no dog");
+        }
+
         while(elapsed < duration)
         {
             elapsed+=Time.deltaTime;
