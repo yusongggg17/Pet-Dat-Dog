@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 using System.Net;
@@ -305,6 +306,7 @@ public class Grid : MonoBehaviour
                 else if(level[newX, newY] == (int)tiles.final)
                 {
                     print("You Win!");
+                    SceneManager.LoadScene("WinScreen");
                     StartCoroutine(Animate(newX, newY));
                 }
                 else if(level[newX, newY] == (int)tiles.child)
