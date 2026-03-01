@@ -2028,6 +2028,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChildPerson
       objectReference: {fileID: 0}
+    - target: {fileID: 8417361359673230750, guid: 5b8f50e60655523408ea429d9d1f7753, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5bb35c9a19f00d1439d2f86fe70d445d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
