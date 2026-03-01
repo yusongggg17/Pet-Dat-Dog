@@ -445,4 +445,9 @@ public class Grid : MonoBehaviour
         }
         dog.transform.position = newPos;
     }
+    void Awake()
+    {
+        UnityEngine.Debug.Log("background");
+        soundManager.playBackground();
+    }
 }
