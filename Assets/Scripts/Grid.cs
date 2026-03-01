@@ -25,6 +25,8 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject build23Tile;
     [SerializeField] public GameObject buildCornerTile;
     [SerializeField] public GameObject dogObject;
+    public SoundManager soundManager;
+    public int dogcounter;
     public int playerX;
     public int playerY;
     public int originX;
@@ -84,7 +86,9 @@ public class Grid : MonoBehaviour
     };
     void Start()
     {
+        soundManager= new SoundManager();
         dogs = new List<GameObject>();
+        dogcounter=0;
         playerX = 3;
         playerY = 44;
         originX=0;
@@ -140,6 +144,8 @@ public class Grid : MonoBehaviour
                         tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
                         GameObject dog=Instantiate(dogObject, new Vector3(originX + i * tileSize, 0f, originY + j * tileSize), Quaternion.identity);
                         dog.SetActive(true);
+                        dog.name=dogcounter.ToString();
+                        dogcounter++;
                         dogs.Add(dog);
                         break;
                     case (int)tiles.buildR1:
@@ -330,9 +336,13 @@ public class Grid : MonoBehaviour
         if (level[x, y] == (int)tiles.empty||level[x, y] == (int)tiles.cone||level[x, y] == (int)tiles.car1||level[x, y] == (int)tiles.car2||level[x, y] == (int)tiles.buildR1||level[x, y] == (int)tiles.buildR2||level[x, y] == (int)tiles.buildCorner||level[x, y] == (int)tiles.sidewalk) return false;
         return true;
     }
+    
     public void ExplodeDog(GameObject dog)
     {
         score--;
         Destroy(dog);
+        //calls a function in sound file to play the correct indexed sound
+        int index=int.Parse(dog.name);
+        soundManager.playName(index);
     }
 }
