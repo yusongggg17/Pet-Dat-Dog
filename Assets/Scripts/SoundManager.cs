@@ -6,6 +6,9 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField]public AudioSource audioSource;
     public AudioClip[] nameClips;
+    public AudioClip explosion;
+    public AudioClip explosionAlt;
+    public AudioClip pipe;
     public double soundDelay;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,11 +24,17 @@ public class SoundManager : MonoBehaviour
 
     public void playName(int index)
     {
+        if(index==50)audioSource.PlayOneShot(explosionAlt, 1f);
+        else    audioSource.PlayOneShot(explosion, 1f);
         Debug.Log("Playing name clip at index: " + index);  
         if (index >= 0&& index<nameClips.Length && nameClips[index] != null) {
             StartCoroutine(PlayDelayed(nameClips[index], (float)soundDelay));
         }
         
+    }
+    public void playPipe()
+    {
+        audioSource.PlayOneShot(pipe, 1f);
     }
 
     IEnumerator PlayDelayed(AudioClip clip, float delay)

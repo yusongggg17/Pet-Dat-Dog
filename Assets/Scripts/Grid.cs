@@ -28,6 +28,7 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject buildCornerTile;
     [SerializeField] public GameObject dogObject;
     [SerializeField] public GameObject light;
+    [SerializeField] public GameObject scoreUI;
     public SoundManager soundManager;
     public int dogcounter;
     public int playerX;
@@ -276,6 +277,7 @@ public class Grid : MonoBehaviour
                     playerY = newY;
                     if(level[newX, newY] == (int)tiles.blind)
                     {
+                        StartCoroutine(AnvilAnimate(newX, newY));
                         print("You stepped on a blind tile!");
                     }
                     StartCoroutine(Animate(newX, newY));
@@ -348,6 +350,7 @@ public class Grid : MonoBehaviour
     public void ExplodeDog(GameObject dog)
     {
         score--;
+        scoreUI. GetComponent<TMPro.TextMeshProUGUI>().text=("Score: "+score);
         Destroy(dog);
         //calls a function in sound file to play the correct indexed sound
         int index=int.Parse(dog.name);
@@ -355,6 +358,7 @@ public class Grid : MonoBehaviour
     }
     public IEnumerator AnvilAnimate(int newX, int newY)
     {
+        soundManager.playPipe();
         level[newX, newY] = (int)tiles.road;
         Vector3 p0=levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position; 
         float elapsed = 0;
