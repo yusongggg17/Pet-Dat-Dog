@@ -17,8 +17,8 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject car1Tile;
     [SerializeField] public GameObject car2Tile;
     [SerializeField] public GameObject coneTile;
-    [SerializeField] public GameObject roadTile;  
-    [SerializeField] public GameObject sidewalkTile;  
+    [SerializeField] public GameObject roadTile;
+    [SerializeField] public GameObject sidewalkTile;
     [SerializeField] public GameObject build11Tile;
     [SerializeField] public GameObject build12Tile;
     [SerializeField] public GameObject build13Tile;
@@ -26,12 +26,13 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject build22Tile;
     [SerializeField] public GameObject build23Tile;
     [SerializeField] public GameObject buildCornerTile;
-    [SerializeField] public GameObject finalTile;
     [SerializeField] public GameObject dogObject;
     [SerializeField] public GameObject gifModel;
     [SerializeField] public GameObject light;
     [SerializeField] public GameObject scoreUI;
     public SoundManager soundManager;
+    public GameObject flashbangcanvas;
+    private CanvasGroup whitebackground;
     public int dogcounter;
     public int playerX;
     public int playerY;
@@ -93,16 +94,18 @@ public class Grid : MonoBehaviour
     public GameObject[,] levelObjs;
     void Start()
     {
+        flashbangcanvas.SetActive(false);
+        whitebackground = flashbangcanvas.GetComponent<CanvasGroup>();
         dogs = new List<GameObject>();
-        dogcounter=0;
+        dogcounter = 0;
         playerX = 3;
         playerY = 44;
-        originX=0;
-        originY=0;
-        tileSize=4;
-        score=0;
-        dogLoop=0;
-        Vector3 p=transform.position;
+        originX = 0;
+        originY = 0;
+        tileSize = 4;
+        score = 0;
+        dogLoop = 0;
+        Vector3 p = transform.position;
         p.x = originX + playerX * tileSize;
         p.z = originY + playerY * tileSize;
         transform.position = p;
@@ -113,7 +116,7 @@ public class Grid : MonoBehaviour
             for (int j = 0; j < level.GetLength(1); j++)
             {
                 GameObject tile = null;
-                switch (level[i,j])
+                switch (level[i, j])
                 {
                     case (int)tiles.empty:
                         continue;
@@ -147,13 +150,13 @@ public class Grid : MonoBehaviour
                         tile = Instantiate(sidewalkTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
                         break;
                     case (int)tiles.final:
-                        tile = Instantiate(finalTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
+                        tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
                         break;
                     case (int)tiles.spawn:
                         tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
-                        GameObject dog=Instantiate(dogObject, new Vector3(originX + i * tileSize, 0f, originY + j * tileSize), Quaternion.identity);
+                        GameObject dog = Instantiate(dogObject, new Vector3(originX + i * tileSize, 0f, originY + j * tileSize), Quaternion.identity);
                         dog.SetActive(true);
-                        dog.name=dogcounter.ToString();
+                        dog.name = dogcounter.ToString();
                         dogcounter++;
                         dogs.Add(dog);
                         break;
@@ -197,11 +200,11 @@ public class Grid : MonoBehaviour
     }
     void Update()
     {
-        dogLoop+=Time.deltaTime;
-        if(dogLoop > 1.5f)
+        dogLoop += Time.deltaTime;
+        if (dogLoop > 2.0f)
         {
-            dogLoop=0;
-            foreach(GameObject dog in dogs)
+            dogLoop = 0;
+            foreach (GameObject dog in dogs)
             {
                 if (dog == null) continue;
                 float dirMag = (new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY) - dog.transform.position).magnitude;
@@ -219,24 +222,24 @@ public class Grid : MonoBehaviour
                 if (dirMag > 0.1f && dirMag < (5f * tileSize))
                 {
                     dog.transform.rotation = Quaternion.LookRotation(dir);
-                    int targetX=(int)((dog.transform.position.x+ dir.x * tileSize - originX) / tileSize);
-                    int targetY=(int)((dog.transform.position.z+ dir.z * tileSize - originY) / tileSize);
-                    Vector3 target=dog.transform.position + dir * tileSize;
-                    Vector3 starting=dog.transform.position;
-                    if(canGoto(targetX, targetY) && (level[targetX, targetY] == (int)tiles.road||level[targetX, targetY] == (int)tiles.final||level[targetX, targetY] == (int)tiles.spawn||level[targetX, targetY] ==(int)tiles.blind))
+                    int targetX = (int)((dog.transform.position.x + dir.x * tileSize - originX) / tileSize);
+                    int targetY = (int)((dog.transform.position.z + dir.z * tileSize - originY) / tileSize);
+                    Vector3 target = dog.transform.position + dir * tileSize;
+                    Vector3 starting = dog.transform.position;
+                    if (canGoto(targetX, targetY) && (level[targetX, targetY] == (int)tiles.road || level[targetX, targetY] == (int)tiles.final || level[targetX, targetY] == (int)tiles.spawn || level[targetX, targetY] == (int)tiles.blind))
                     {
-                        bool closeDog=false;
-                        foreach(GameObject d in dogs)
+                        bool closeDog = false;
+                        foreach (GameObject d in dogs)
                         {
                             if (d == null) continue;
                             if (d == dog) continue;
                             if (Vector3.Distance(d.transform.position, new Vector3(targetX * tileSize + originX, 0f, targetY * tileSize + originY)) < 0.1f)
                             {
-                                closeDog=true;
+                                closeDog = true;
                                 break;
                             }
                         }
-                        if(!closeDog) StartCoroutine(AnimateDog(starting, target, dog));
+                        if (!closeDog) StartCoroutine(AnimateDog(starting, target, dog));
                     }
                 }
                 if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY)) < 0.1f)
@@ -269,17 +272,17 @@ public class Grid : MonoBehaviour
             default:
                 return;
         }
-        if(canGoto(newX, newY))
+        if (canGoto(newX, newY))
         {
             if (level[newX, newY] == (int)tiles.jump)
             {
-                if(canGoto(newX + (newX - playerX), newY + (newY - playerY)))
+                if (canGoto(newX + (newX - playerX), newY + (newY - playerY)))
                 {
                     newX += (newX - playerX);
                     newY += (newY - playerY);
                     playerX = newX;
                     playerY = newY;
-                    if(level[newX, newY] == (int)tiles.blind)
+                    if (level[newX, newY] == (int)tiles.blind)
                     {
                         StartCoroutine(AnvilAnimate(newX, newY));
                         print("You stepped on a blind tile!");
@@ -292,22 +295,22 @@ public class Grid : MonoBehaviour
             {
                 playerX = newX;
                 playerY = newY;
-                if(level[newX, newY] == (int)tiles.blind)
+                if (level[newX, newY] == (int)tiles.blind)
                 {
                     print("You stepped on a blind tile!");
                     StartCoroutine(AnvilAnimate(newX, newY));
                     StartCoroutine(Animate(newX, newY));
                 }
-                else if(level[newX, newY] == (int)tiles.slow)
+                else if (level[newX, newY] == (int)tiles.slow)
                 {
                     StartCoroutine(Animate(newX, newY, 0.5f));
                 }
-                else if(level[newX, newY] == (int)tiles.final)
+                else if (level[newX, newY] == (int)tiles.final)
                 {
                     print("You Win!");
                     StartCoroutine(Animate(newX, newY));
                 }
-                else if(level[newX, newY] == (int)tiles.child)
+                else if (level[newX, newY] == (int)tiles.child)
                 {
                     print("You stepped on a child tile!");
                     StartCoroutine(ChildAnimate(newX, newY));
@@ -319,16 +322,16 @@ public class Grid : MonoBehaviour
         }
     }
     public IEnumerator Animate(int newX, int newY, float duration = 0.25f)
-    {   
+    {
         isMoving = true;
-        Vector3 p=transform.position;
-        Vector3 p0=p;
+        Vector3 p = transform.position;
+        Vector3 p0 = p;
         p.x = originX + newX * tileSize;
         p.z = originY + newY * tileSize;
         float elapsed = 0;
-        while(elapsed < duration)
+        while (elapsed < duration)
         {
-            elapsed+=Time.deltaTime;
+            elapsed += Time.deltaTime;
             transform.position = Vector3.Lerp(p0, p, (float)elapsed / duration);
             yield return null;
         }
@@ -347,94 +350,90 @@ public class Grid : MonoBehaviour
     public bool canGoto(int x, int y)
     {
         if (x < 0 || x >= level.GetLength(0) || y < 0 || y >= level.GetLength(1)) return false;
-        if (level[x, y] == (int)tiles.empty||level[x, y] == (int)tiles.cone||level[x, y] == (int)tiles.car1||level[x, y] == (int)tiles.car2||level[x, y] == (int)tiles.buildR1||level[x, y] == (int)tiles.buildR2||level[x, y] == (int)tiles.buildCorner||level[x, y] == (int)tiles.sidewalk) return false;
+        if (level[x, y] == (int)tiles.empty || level[x, y] == (int)tiles.cone || level[x, y] == (int)tiles.car1 || level[x, y] == (int)tiles.car2 || level[x, y] == (int)tiles.buildR1 || level[x, y] == (int)tiles.buildR2 || level[x, y] == (int)tiles.buildCorner || level[x, y] == (int)tiles.sidewalk) return false;
         return true;
     }
-    
+
     public IEnumerator ExplodeDog(GameObject dog)
     {
         score--;
-        scoreUI. GetComponent<TMPro.TextMeshProUGUI>().text=("Score: "+score);
-        GameObject gif=Instantiate(gifModel, new Vector3(dog.transform.position.x, dog.transform.position.y+1, dog.transform.position.z), Quaternion.identity);
+        scoreUI.GetComponent<TMPro.TextMeshProUGUI>().text = ("Score: " + score);
+        GameObject gif = Instantiate(gifModel, new Vector3(dog.transform.position.x, dog.transform.position.y + 1, dog.transform.position.z), Quaternion.identity);
         gif.SetActive(true);
         Destroy(dog);
-        int index=int.Parse(dog.name);
+        int index = int.Parse(dog.name);
         soundManager.playName(index);
-        float elapsed=0;
-        while(elapsed < 1.0f)
+        float elapsed = 0;
+        while (elapsed < 1.0f)
         {
             yield return null;
-            elapsed+=Time.deltaTime;
+            elapsed += Time.deltaTime;
         }
         Destroy(gif);
     }
     public IEnumerator AnvilAnimate(int newX, int newY)
     {
+        UnityEngine.Debug.Log("AnvilAnimate called");
         soundManager.playPipe();
         level[newX, newY] = (int)tiles.road;
-        Vector3 p0=levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position; 
+        Vector3 p0 = levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position;
         float elapsed = 0;
         Vector3 p = p0;
         p.y -= 5f;
-        while(elapsed < 0.5f)
+        while (elapsed < 0.5f)
         {
-            elapsed+=Time.deltaTime;
+            elapsed += Time.deltaTime;
             levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position = Vector3.Lerp(p0, p, (float)elapsed / 0.5f);
             yield return null;
         }
         levelObjs[newX, newY].transform.GetChild(1).gameObject.SetActive(false);
-        while(elapsed < 1f)
+        while (elapsed < 1f)
         {
-            light.GetComponent<Light>().intensity=1+(((elapsed-0.5f)/0.5f)*99);
+            //light.GetComponent<Light>().intensity = 1 + (((elapsed - 0.5f) / 0.5f) * 99);
+            flashbangcanvas.SetActive(true);
+            whitebackground.alpha = Mathf.Lerp(0f, 1f, elapsed += 0.08f);
             yield return null;
-            elapsed+=Time.deltaTime;
+            elapsed += Time.deltaTime;
         }
-        while(elapsed < 3f)
+        while (elapsed < 3f)
         {
-            light.GetComponent<Light>().intensity=100-(((elapsed-1f)/2f)*99);
+            //light.GetComponent<Light>().intensity = 100 - (((elapsed - 1f) / 2f) * 99);
+            whitebackground.alpha = Mathf.Lerp(0f, 1f, elapsed -= 0.08f);
             yield return null;
-            elapsed+=Time.deltaTime;
+            elapsed += Time.deltaTime;
         }
-        light.GetComponent<Light>().intensity=1;
+        whitebackground.alpha = 1;
+        flashbangcanvas.SetActive(false);
+        //light.GetComponent<Light>().intensity = 1;
     }
     public IEnumerator ChildAnimate(int newX, int newY)
-    {   
+    {
         soundManager.playKick();
         level[newX, newY] = (int)tiles.road;
         float elapsed = 0;
-        while(elapsed < 0.5f)
+        while (elapsed < 0.5f)
         {
-            elapsed+=Time.deltaTime;
+            elapsed += Time.deltaTime;
             yield return null;
         }
-        Vector3 p0=levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position; 
+        Vector3 p0 = levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position;
         elapsed = 0;
         Vector3 p = p0;
         p.y += 15f;
-        while(elapsed < 0.25f)
+        while (elapsed < 0.25f)
         {
-            elapsed+=Time.deltaTime;
+            elapsed += Time.deltaTime;
             levelObjs[newX, newY].transform.GetChild(1).gameObject.transform.position = Vector3.Lerp(p0, p, (float)elapsed / 0.25f);
             yield return null;
         }
         levelObjs[newX, newY].transform.GetChild(1).gameObject.SetActive(false);
     }
     public IEnumerator AnimateDog(Vector3 oldPos, Vector3 newPos, GameObject dog, float duration = 0.25f)
-    {   
+    {
         float elapsed = 0;
-        if (dog.GetComponentInChildren<dogJump>() != null)
+        while (elapsed < duration)
         {
-            dog.GetComponentInChildren<dogJump>().playJumpAnim();
-            
-        }
-        else
-        {
-            print("no dog");
-        }
-
-        while(elapsed < duration)
-        {
-            elapsed+=Time.deltaTime;
+            elapsed += Time.deltaTime;
             dog.transform.position = Vector3.Lerp(oldPos, newPos, (float)elapsed / duration);
             if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0f, playerY * tileSize + originY)) < 0.1f)
             {
