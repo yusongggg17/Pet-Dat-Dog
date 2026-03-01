@@ -2948,7 +2948,7 @@ MonoBehaviour:
   explosion: {fileID: 8300000, guid: b6053b55dd822c74f8614b173f9d2f38, type: 3}
   explosionAlt: {fileID: 8300000, guid: b131d474d3997ae48a68fff23a739f16, type: 3}
   pipe: {fileID: 8300000, guid: da8b096ad43cdd8439a379c097690c75, type: 3}
-  kick: {fileID: 8300000, guid: 0d96001bbf825f24696f870e92342cb2, type: 3}
+  kick: {fileID: 8300000, guid: 579308a2826cbe140a1c1eb73f2c0b5a, type: 3}
   soundDelay: 2
 --- !u!1 &1256457387
 GameObject:
