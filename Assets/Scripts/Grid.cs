@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 public class Grid : MonoBehaviour
 {
-    public enum tiles { spawn, final, buildR1, buildR2, buildCorner, jump, blind, slow, child, car1, car2, cone, road, empty };
+    public enum tiles { sidewalk, spawn, final, buildR1, buildR2, buildCorner, jump, blind, slow, child, car1, car2, cone, road, empty };
     [SerializeField] public GameObject jumpTile;
     [SerializeField] public GameObject blindTile;
     [SerializeField] public GameObject slowTile;
@@ -16,6 +16,7 @@ public class Grid : MonoBehaviour
     [SerializeField] public GameObject car2Tile;
     [SerializeField] public GameObject coneTile;
     [SerializeField] public GameObject roadTile;  
+    [SerializeField] public GameObject sidewalkTile;  
     [SerializeField] public GameObject build11Tile;
     [SerializeField] public GameObject build12Tile;
     [SerializeField] public GameObject build13Tile;
@@ -129,6 +130,9 @@ public class Grid : MonoBehaviour
                         break;
                     case (int)tiles.road:
                         tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
+                        break;
+                    case (int)tiles.sidewalk:
+                        tile = Instantiate(sidewalkTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
                         break;
                     case (int)tiles.final:
                         tile = Instantiate(roadTile, new Vector3(originX + i * tileSize, 0, originY + j * tileSize), Quaternion.identity);
@@ -249,47 +253,50 @@ public class Grid : MonoBehaviour
             default:
                 return;
         }
-        if(canGoto(newX, newY) && level[newX, newY] == (int)tiles.jump)
+        if(canGoto(newX, newY))
         {
-            if (canGoto(newX + (newX - playerX), newY + (newY - playerY)))
+            if (level[newX, newY] == (int)tiles.jump)
             {
-            newX += (newX - playerX);
-            newY += (newY - playerY);
-            playerX = newX;
-            playerY = newY;
-            if(level[newX, newY] == (int)tiles.blind)
+                if(canGoto(newX + (newX - playerX), newY + (newY - playerY)))
+                {
+                    newX += (newX - playerX);
+                    newY += (newY - playerY);
+                    playerX = newX;
+                    playerY = newY;
+                    if(level[newX, newY] == (int)tiles.blind)
+                    {
+                        print("You stepped on a blind tile!");
+                    }
+                    StartCoroutine(Animate(newX, newY));
+                    print("Moved to: " + playerX + ", " + playerY);
+                }
+            }
+            else
             {
-                print("You stepped on a blind tile!");
+                playerX = newX;
+                playerY = newY;
+                if(level[newX, newY] == (int)tiles.blind)
+                {
+                    print("You stepped on a blind tile!");
+                    StartCoroutine(Animate(newX, newY));
+                }
+                else if(level[newX, newY] == (int)tiles.slow)
+                {
+                    StartCoroutine(Animate(newX, newY, 0.5f));
+                }
+                else if(level[newX, newY] == (int)tiles.final)
+                {
+                    print("You Win!");
+                    StartCoroutine(Animate(newX, newY));
+                }
+                else if(level[newX, newY] == (int)tiles.child)
+                {
+                    print("You stepped on a child tile!");
+                    StartCoroutine(Animate(newX, newY, 0.5f));
+                }
+                else StartCoroutine(Animate(newX, newY));
+                print("Moved to: " + playerX + ", " + playerY);
             }
-            StartCoroutine(Animate(newX, newY));
-            print("Moved to: " + playerX + ", " + playerY);
-            }
-        }
-        else if (canGoto(newX, newY))
-        {
-            playerX = newX;
-            playerY = newY;
-            if(level[newX, newY] == (int)tiles.blind)
-            {
-                print("You stepped on a blind tile!");
-                StartCoroutine(Animate(newX, newY));
-            }
-            else if(level[newX, newY] == (int)tiles.slow)
-            {
-                StartCoroutine(Animate(newX, newY, 0.5f));
-            }
-            else if(level[newX, newY] == (int)tiles.final)
-            {
-                print("You Win!");
-                StartCoroutine(Animate(newX, newY));
-            }
-            else if(level[newX, newY] == (int)tiles.child)
-            {
-                print("You stepped on a child tile!");
-                StartCoroutine(Animate(newX, newY, 0.5f));
-            }
-            else StartCoroutine(Animate(newX, newY));
-            print("Moved to: " + playerX + ", " + playerY);
         }
     }
     public IEnumerator Animate(int newX, int newY, float duration = 0.25f)
@@ -321,7 +328,7 @@ public class Grid : MonoBehaviour
     public bool canGoto(int x, int y)
     {
         if (x < 0 || x >= level.GetLength(0) || y < 0 || y >= level.GetLength(1)) return false;
-        if (level[x, y] == (int)tiles.empty||level[x, y] == (int)tiles.cone||level[x, y] == (int)tiles.car1||level[x, y] == (int)tiles.car2||level[x, y] == (int)tiles.buildR1||level[x, y] == (int)tiles.buildR2||level[x, y] == (int)tiles.buildCorner) return false;
+        if (level[x, y] == (int)tiles.empty||level[x, y] == (int)tiles.cone||level[x, y] == (int)tiles.car1||level[x, y] == (int)tiles.car2||level[x, y] == (int)tiles.buildR1||level[x, y] == (int)tiles.buildR2||level[x, y] == (int)tiles.buildCorner||level[x, y] == (int)tiles.sidewalk) return false;
         return true;
     }
     public void ExplodeDog(GameObject dog)
