@@ -303,7 +303,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 351854252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717eaf3f112221a44817e93d9d86aeba, type: 3}
+  m_Script: {fileID: 11500000, guid: 99965cd00bff2b3408beaa4f031b186d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WinScreenSpin
 --- !u!114 &351854255
@@ -1008,7 +1008,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1575571019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717eaf3f112221a44817e93d9d86aeba, type: 3}
+  m_Script: {fileID: 11500000, guid: 99965cd00bff2b3408beaa4f031b186d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WinScreenSpin
 --- !u!114 &1575571022
