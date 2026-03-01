@@ -1,5 +1,5 @@
 using System;
-using UnityEditor.Animations;
+using UnityEngine.Animations;
 using UnityEngine;
 
 public class dogJump : MonoBehaviour

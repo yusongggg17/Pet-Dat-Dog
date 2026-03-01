@@ -1,11 +1,10 @@
 using System.Collections;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class benddown : MonoBehaviour
 {
-    public AnimatorController animcon;
+    public RuntimeAnimatorController animcon;
 
     public GameObject canvas2;
     public GameObject explo;
