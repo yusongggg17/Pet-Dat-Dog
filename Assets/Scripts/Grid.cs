@@ -4,6 +4,7 @@ using System.Collections;
 using System;
 using System.Net;
 using System.Collections.Generic;
+using System.Data;
 public class Grid : MonoBehaviour
 {
     public enum tiles { spawn, final, buildR1, buildR2, buildCorner, jump, blind, slow, child, car1, car2, cone, road, empty };
@@ -200,9 +201,22 @@ public class Grid : MonoBehaviour
                 if (dirMag > 0.1f && dirMag < (5f * tileSize))
                 {
                     dog.transform.rotation = Quaternion.LookRotation(dir);
-                    if(canGoto((int)((dog.transform.position.x+ dir.x * tileSize - originX) / tileSize), (int)((dog.transform.position.z+ dir.z * tileSize - originY) / tileSize)))
+                    int targetX=(int)((dog.transform.position.x+ dir.x * tileSize - originX) / tileSize);
+                    int targetY=(int)((dog.transform.position.z+ dir.z * tileSize - originY) / tileSize);
+                    if(canGoto(targetX, targetY) && (level[targetX, targetY] == (int)tiles.road||level[targetX, targetY] == (int)tiles.final||level[targetX, targetY] == (int)tiles.spawn||level[targetX, targetY] ==(int)tiles.blind))
                     {
-                        dog.transform.position += dir * tileSize;
+                        bool closeDog=false;
+                        foreach(GameObject d in dogs)
+                        {
+                            if (d == null) continue;
+                            if (d == dog) continue;
+                            if (Vector3.Distance(d.transform.position, new Vector3(targetX * tileSize + originX, 0.5f, targetY * tileSize + originY)) < 0.1f)
+                            {
+                                closeDog=true;
+                                break;
+                            }
+                        }
+                        if(!closeDog) dog.transform.position += dir * tileSize;
                     }
                 }
                 if (Vector3.Distance(dog.transform.position, new Vector3(playerX * tileSize + originX, 0.5f, playerY * tileSize + originY)) < 0.1f)
