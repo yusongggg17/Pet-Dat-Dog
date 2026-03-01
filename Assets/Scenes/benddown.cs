@@ -8,6 +8,7 @@ public class benddown : MonoBehaviour
     public AnimatorController animcon;
 
     public GameObject canvas2;
+    public GameObject explo;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -18,8 +19,9 @@ public class benddown : MonoBehaviour
     {
        yield return new WaitForSeconds(4.5f);
         GetComponent<Animator>().runtimeAnimatorController = animcon;
-        
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(1.5f);
+        explo.SetActive(true);
+        yield return new WaitForSeconds(3f);
         canvas2.SetActive(true);
         
         yield return new WaitForSeconds(3.5f);

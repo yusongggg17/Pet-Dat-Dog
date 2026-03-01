@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 public class startButton : MonoBehaviour
 {
     public GameObject daCanvas;
+    
+    
     private void Start()
     {
         Time.timeScale = 0;
@@ -16,6 +18,7 @@ public class startButton : MonoBehaviour
         AudioListener.pause = false;
         Time.timeScale = 1;
        daCanvas.SetActive(false);
+      
        
     }
 }
